@@ -49,6 +49,7 @@ class ConductoreController extends Controller
         if ($request->hasFile('imagen')) {
             $imagenPath = $request->file('imagen')->store('public/conductores');
             $imagenPath = str_replace('public/', '', $imagenPath); // Obtener ruta relativa
+
         }
 
         // Crear un nuevo conductor en la base de datos

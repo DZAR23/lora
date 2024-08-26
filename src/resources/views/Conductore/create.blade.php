@@ -28,6 +28,10 @@
                         <label for="imagen" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Imagen</label>
                         <input type="file" name="imagen" id="imagen" 
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-teal-500 dark:focus:border-teal-500">
+                        @if($conductore->imagen)
+                            <img src="{{ asset('storage/conductores/' . $conductore->imagen) }}" alt="Imagen del conductor" class="mt-2 w-32 h-auto object-cover rounded-lg border border-gray-300 dark:border-gray-600">         
+                        @endif
+                            
                         @error('imagen')
                             <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
                         @enderror

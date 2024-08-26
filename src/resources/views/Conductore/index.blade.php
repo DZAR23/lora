@@ -36,10 +36,10 @@
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">{{ $conductores->id }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300 text-center">
                                             @if ($conductores->imagen)
-                                                <img src="{{ asset('storage/conductores/' . $conductores->imagen) }}" alt="Imagen de conductor" class="w-20 h-20 object-cover rounded-full border border-gray-300 dark:border-gray-600">
+                                                <img src="{{ asset('storage/' . $conductores->imagen) }}" alt="Imagen de conductor" class="w-20 h-20 object-cover rounded-full border border-gray-300 dark:border-gray-600">
                                             @else
                                                 No disponible
-                                            @endif
+                                            @endif 
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">{{ $conductores->name }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">{{ $conductores->movil }}</td>
