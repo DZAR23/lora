@@ -1,13 +1,13 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-white leading-tight">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-white leading-tight transition-opacity opacity-100 animate-fade-in">
             {{ __('Editar Conductor') }}
         </h2>
     </x-slot>
 
-    <div class="py-12">
+    <div id="content-wrapper" class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg p-6 lg:p-8">
+            <div id="content" class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg p-6 lg:p-8 border border-gray-200 dark:border-gray-700 transition-opacity opacity-100 animate-fade-in">
 
                 <!-- Mostrar errores de validación -->
                 @if ($errors->any())
@@ -98,4 +98,97 @@
             </div>
         </div>
     </div>
+
+    <!-- Overlay de carga -->
+    <div id="overlay" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 hidden">
+        <div class="text-white text-lg">Cargando...</div>
+    </div>
+
+    <style>
+        /* Animación de entrada suave */
+        @keyframes fade-in {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .animate-fade-in {
+            animation: fade-in 0.75s ease-out;
+        }
+
+        /* Animación de salida suave */
+        @keyframes fade-out {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+        }
+
+        .animate-fade-out {
+            animation: fade-out 0.75s ease-in;
+        }
+
+        #overlay {
+            display: none; /* Oculto por defecto */
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        #overlay.show {
+            display: flex; /* Mostrar cuando sea necesario */
+            opacity: 1;
+        }
+        #content-wrapper {
+            transition: opacity 0.75s ease-in-out;
+        }
+        #content-wrapper.hide {
+            opacity: 0;
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const overlay = document.getElementById('overlay');
+            const contentWrapper = document.getElementById('content-wrapper');
+
+            // Función para mostrar el overlay
+            function showOverlay() {
+                overlay.classList.add('show');
+                contentWrapper.classList.add('hide'); // Ocultar el contenido principal con animación
+            }
+
+            // Función para ocultar el overlay
+            function hideOverlay() {
+                overlay.classList.remove('show');
+                contentWrapper.classList.remove('hide'); // Mostrar el contenido principal
+            }
+
+            // Manejar la transición de salida
+            const links = document.querySelectorAll('a');
+            links.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    if (this.href) { // Verificar si el enlace tiene una URL
+                        e.preventDefault(); // Evitar la navegación por defecto
+                        showOverlay();
+                        setTimeout(() => {
+                            window.location.href = this.href; // Navegar después de mostrar el overlay
+                        }, 750); // Igualar a la duración de la animación
+                    }
+                });
+            });
+
+            // Ocultar el overlay cuando la nueva página se haya cargado
+            window.addEventListener('load', function() {
+                hideOverlay();
+            });
+        });
+    </script>
 </x-app-layout>

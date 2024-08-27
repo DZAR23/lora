@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ConductoreController;
+use App\Http\Controllers\MapaConductoresController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -17,4 +18,9 @@ Route::middleware([
     })->name('dashboard');
 
     Route::resource('Conductore', ConductoreController::class);
+
+    Route::middleware(['auth', 'verified'])->group(function () {
+        Route::get('/mapa-conductores', [MapaConductoresController::class, 'index'])
+            ->name('mapa-conductores.index');
+    });
 });
