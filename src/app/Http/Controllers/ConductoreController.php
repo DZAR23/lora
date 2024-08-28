@@ -11,12 +11,28 @@ class ConductoreController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $conductore = Conductore::all();
-        return view('Conductore.index', compact('conductore'));
+        $search = $request->query('search');
+
+        // Consultar la base de datos según el término de búsqueda
+        $conductores = Conductore::query()
+            ->when($search, function ($query, $search) {
+                $query->where('id', 'like', "%{$search}%")
+                      ->orWhere('name', 'like', "%{$search}%")
+                      ->orWhere('telefono', 'like', "%{$search}%")
+                      ->orWhere('email', 'like', "%{$search}%");
+            })
+            ->get();
+
+        // Verificar si no se encontraron resultados
+        if ($conductores->isEmpty()) {
+            session()->flash('search_message', 'No se encontraron resultados para: ' . htmlspecialchars($search));
+        }
+
+        return view('Conductore.index', compact('conductores'));
     }
-    
+
     public function create()
     {
         return view('Conductore.create');
@@ -49,7 +65,6 @@ class ConductoreController extends Controller
         if ($request->hasFile('imagen')) {
             $imagenPath = $request->file('imagen')->store('public/conductores');
             $imagenPath = str_replace('public/', '', $imagenPath); // Obtener ruta relativa
-
         }
 
         // Crear un nuevo conductor en la base de datos

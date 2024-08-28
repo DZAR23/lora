@@ -11,6 +11,31 @@
             <div id="content" class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 lg:p-8 border border-gray-200 dark:border-gray-700 transition-opacity opacity-100 animate-fade-in">
                 <div class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 mb-6">
 
+                    <!-- Formulario de búsqueda -->
+                    <div class="mb-4">
+                        <form action="{{ route('Conductore.index') }}" method="GET">
+                            <div class="flex items-center border border-gray-300 rounded-lg overflow-hidden">
+                                <input 
+                                    type="text" 
+                                    name="search" 
+                                    value="{{ request()->query('search') }}" 
+                                    placeholder="Buscar por número, nombre, correo o teléfono..." 
+                                    class="px-4 py-2 w-full focus:outline-none"
+                                >
+                                <button type="submit" class="bg-teal-600 hover:bg-teal-700 text-white font-semibold py-2 px-4">
+                                    Buscar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Mensaje de búsqueda -->
+                    @if (session('search_message'))
+                        <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+                            {{ session('search_message') }}
+                        </div>
+                    @endif
+
                     <!-- Botón para crear un nuevo conductor -->
                     <div class="mb-4 flex justify-end">
                         <a href="{{ route('Conductore.create') }}" class="bg-teal-600 hover:bg-teal-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:shadow-xl transition-transform transform hover:scale-105">
@@ -36,27 +61,27 @@
                             </thead>
                             <!-- Cuerpo de la tabla -->
                             <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-                                @foreach ($conductore as $conductores)
+                                @foreach ($conductores as $conductor)
                                     <tr class="hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-150">
-                                        <td class="px-4 py-4 text-sm font-medium text-gray-900 dark:text-gray-100">{{ $conductores->id }}</td>
+                                        <td class="px-4 py-4 text-sm font-medium text-gray-900 dark:text-gray-100">{{ $conductor->id }}</td>
                                         <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 text-center">
-                                            @if ($conductores->imagen)
-                                                <img src="{{ asset('storage/' . $conductores->imagen) }}" alt="Imagen de conductor" class="w-16 h-16 object-cover rounded-full border border-gray-300 dark:border-gray-600">
+                                            @if ($conductor->imagen)
+                                                <img src="{{ asset('storage/' . $conductor->imagen) }}" alt="Imagen de conductor" class="w-16 h-16 object-cover rounded-full border border-gray-300 dark:border-gray-600">
                                             @else
                                                 No disponible
                                             @endif 
                                         </td>
-                                        <td class="px-4 py-4 text-sm text-gray-900 dark:text-gray-100">{{ $conductores->name }}</td>
-                                        <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300">{{ $conductores->movil }}</td>
-                                        <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300">{{ $conductores->categoria }}</td>
-                                        <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300">{{ $conductores->email }}</td>
-                                        <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300">{{ $conductores->telefono }}</td>
+                                        <td class="px-4 py-4 text-sm text-gray-900 dark:text-gray-100">{{ $conductor->name }}</td>
+                                        <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300">{{ $conductor->movil }}</td>
+                                        <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300">{{ $conductor->categoria }}</td>
+                                        <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300">{{ $conductor->email }}</td>
+                                        <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300">{{ $conductor->telefono }}</td>
                                         <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300">
                                             <div class="flex space-x-2 justify-center">
-                                                <a href="{{ route('Conductore.edit', $conductores->id) }}" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:shadow-xl transition-transform transform hover:scale-105">
+                                                <a href="{{ route('Conductore.edit', $conductor->id) }}" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:shadow-xl transition-transform transform hover:scale-105">
                                                     Editar
                                                 </a>
-                                                <form action="{{ route('Conductore.destroy', $conductores->id) }}" method="POST" onsubmit="return confirm('¿Estás seguro de que quieres eliminar este conductor?');">
+                                                <form action="{{ route('Conductore.destroy', $conductor->id) }}" method="POST" onsubmit="return confirm('¿Estás seguro de que quieres eliminar este conductor?');">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:shadow-xl transition-transform transform hover:scale-105">
