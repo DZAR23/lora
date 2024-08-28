@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -51,7 +50,7 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the attributes that should be cast.
+     * The attributes that should be cast.
      *
      * @return array<string, string>
      */
@@ -61,5 +60,27 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Relación con el modelo Conductore.
+     * Un usuario puede tener muchos conductores asociados.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function conductore()
+    {
+        return $this->hasMany(Conductore::class);
+    }
+
+    /**
+     * Relación con el modelo Mensaje.
+     * Un usuario puede tener muchos mensajes asociados.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function mensajes()
+    {
+        return $this->hasMany(Message::class);
     }
 }

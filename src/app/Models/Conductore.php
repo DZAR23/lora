@@ -44,4 +44,9 @@ class Conductore extends Model
         // Retorna una URL predeterminada si no hay imagen
         return 'https://via.placeholder.com/150';
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

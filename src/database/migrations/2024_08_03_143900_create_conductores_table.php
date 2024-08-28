@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('email');
             $table->string('telefono');
             $table->timestamps();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Relación con la tabla 'users'
+            $table->timestamps();
         });
     }
 
