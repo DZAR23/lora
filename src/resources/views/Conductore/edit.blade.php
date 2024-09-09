@@ -30,9 +30,9 @@
                         <label for="image" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Imagen</label>
                         <input type="file" name="image" id="image" 
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-teal-500 dark:focus:border-teal-500">
-                        @if($conductore->imagen)
-                            <img src="{{ asset('storage/' . $conductore->imagen) }}" alt="Imagen del conductor" class="mt-2 w-32 h-auto object-cover rounded-lg border border-gray-300 dark:border-gray-600"> 
-                        @endif
+                        
+                        <!-- Previsualización de la imagen -->
+                        <img id="preview-imagen" src="{{ $conductore->imagen ? asset('storage/' . $conductore->imagen) : '#' }}" alt="Previsualización de la imagen" class="mt-4 w-32 h-auto object-cover rounded-lg border border-gray-300 dark:border-gray-600 {{ $conductore->imagen ? '' : 'hidden' }}"> 
                     </div>
 
                     <!-- Campo para nombre -->
@@ -158,36 +158,36 @@
         document.addEventListener('DOMContentLoaded', function() {
             const overlay = document.getElementById('overlay');
             const contentWrapper = document.getElementById('content-wrapper');
+            const form = document.querySelector('form');
 
-            // Función para mostrar el overlay
-            function showOverlay() {
-                overlay.classList.add('show');
-                contentWrapper.classList.add('hide'); // Ocultar el contenido principal con animación
-            }
-
-            // Función para ocultar el overlay
-            function hideOverlay() {
-                overlay.classList.remove('show');
-                contentWrapper.classList.remove('hide'); // Mostrar el contenido principal
-            }
-
-            // Manejar la transición de salida
-            const links = document.querySelectorAll('a');
-            links.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    if (this.href) { // Verificar si el enlace tiene una URL
-                        e.preventDefault(); // Evitar la navegación por defecto
-                        showOverlay();
-                        setTimeout(() => {
-                            window.location.href = this.href; // Navegar después de mostrar el overlay
-                        }, 750); // Igualar a la duración de la animación
-                    }
-                });
+            form.addEventListener('submit', function() {
+                contentWrapper.classList.add('animate-fade-out');
+                setTimeout(function() {
+                    overlay.classList.add('show');
+                }, 500);
             });
 
-            // Ocultar el overlay cuando la nueva página se haya cargado
-            window.addEventListener('load', function() {
-                hideOverlay();
+            // Manejo de la previsualización de la imagen
+            const inputImagen = document.getElementById('image');
+            const previewImagen = document.getElementById('preview-imagen');
+
+            inputImagen.addEventListener('change', function() {
+                const archivo = this.files[0];
+
+                if (archivo) {
+                    const lector = new FileReader();
+
+                    lector.onload = function(e) {
+                        previewImagen.src = e.target.result;
+                        previewImagen.classList.remove('hidden');
+                    }
+
+                    lector.readAsDataURL(archivo);
+                } else {
+                    previewImagen.src = '#';
+                    previewImagen.classList.add('hidden');
+                }
+                
             });
         });
     </script>

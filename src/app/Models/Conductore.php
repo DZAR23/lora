@@ -17,6 +17,7 @@ class Conductore extends Model
      *
      * @return string
      */
+
     public function getImagenUrlAttribute()
     {
         // Asegúrate de que `imagen` tenga una ruta válida antes de intentar construir la URL

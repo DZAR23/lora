@@ -31,6 +31,8 @@
                         @error('imagen')
                             <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
                         @enderror
+                        <!-- Previsualización de la imagen -->
+                        <img id="preview-imagen" src="#" alt="Previsualización de la imagen" class="mt-4 hidden w-32 h-32 object-cover rounded-full">
                     </div>
 
                     <!-- Campo para nombre -->
@@ -156,6 +158,8 @@
         document.addEventListener('DOMContentLoaded', function() {
             const overlay = document.getElementById('overlay');
             const contentWrapper = document.getElementById('content-wrapper');
+            const inputImagen = document.getElementById('imagen');
+            const previewImagen = document.getElementById('preview-imagen');
 
             // Función para mostrar el overlay
             function showOverlay() {
@@ -168,6 +172,22 @@
                 overlay.classList.remove('show');
                 contentWrapper.classList.remove('hide'); // Mostrar el contenido principal
             }
+
+            // Previsualización de la imagen seleccionada
+            inputImagen.addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        previewImagen.src = e.target.result;
+                        previewImagen.classList.remove('hidden');
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    previewImagen.src = '#';
+                    previewImagen.classList.add('hidden');
+                }
+            });
 
             // Manejar la transición de salida
             const links = document.querySelectorAll('a');

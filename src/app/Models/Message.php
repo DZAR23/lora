@@ -15,12 +15,13 @@ class Message extends Model
         'content',
     ];
 
-    // Definir las relaciones si es necesario
+    // Relación con el usuario que envía el mensaje
     public function senderUser()
     {
         return $this->belongsTo(User::class, 'sender');
     }
 
+    // Relación con el usuario que recibe el mensaje
     public function receiverUser()
     {
         return $this->belongsTo(User::class, 'receiver');

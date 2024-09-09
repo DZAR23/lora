@@ -19,7 +19,7 @@
                                     type="text" 
                                     name="search" 
                                     value="{{ request()->query('search') }}" 
-                                    placeholder="Buscar por número, nombre, correo o teléfono..." 
+                                    placeholder="Buscar conductor por número, nombre, correo o teléfono..." 
                                     class="px-4 py-2 w-full focus:outline-none"
                                 >
                                 <button type="submit" class="bg-teal-600 hover:bg-teal-700 text-white font-semibold py-2 px-4">

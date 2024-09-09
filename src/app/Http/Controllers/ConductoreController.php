@@ -31,6 +31,8 @@ class ConductoreController extends Controller
             session()->flash('search_message', 'No se encontraron resultados para: ' . htmlspecialchars($search));
         }
 
+        $conductores = auth()->user()->conductore;
+
         return view('Conductore.index', compact('conductores'));
     }
 
@@ -41,8 +43,8 @@ class ConductoreController extends Controller
 
     public function store(Request $request)
     {
-        // Validar los datos del formulario
-        $request->validate([
+        // Validar los datos del formulario y asignarlos a la variable $validated
+        $validated = $request->validate([
             'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validación de imagen
             'name' => 'required|string|min:5|max:255',
             'movil' => 'required|string|min:1|max:6',
@@ -68,15 +70,11 @@ class ConductoreController extends Controller
             $imagenPath = str_replace('public/', '', $imagenPath); // Obtener ruta relativa
         }
 
-        // Crear un nuevo conductor en la base de datos
-        Conductore::create([
-            'imagen' => $imagenPath,
-            'name' => $request->input('name'),
-            'movil' => $request->input('movil'),
-            'categoria' => $request->input('categoria'),
-            'email' => $request->input('email'),
-            'telefono' => $request->input('telefono'),
-        ]);
+        // Añadir el path de la imagen validada si está presente
+        $validated['imagen'] = $imagenPath;
+
+        // Crear un nuevo conductor en la base de datos asociado al usuario autenticado
+        auth()->user()->conductore()->create($validated);
 
         // Redireccionar a la vista de listado de conductores
         return redirect()->route('Conductore.index')->with('success', 'Conductor creado con éxito.');
