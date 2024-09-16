@@ -1,6 +1,5 @@
 import defaultTheme from 'tailwindcss/defaultTheme';
-import forms from '@tailwindcss/forms';
-import typography from '@tailwindcss/typography';
+
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -16,8 +15,15 @@ export default {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+            colors: {
+                customOrange: '#FFA500',
+                customWhite: '#FFFFFF',
+            }
         },
     },
 
-    plugins: [forms, typography],
+    plugins: [
+        require('@tailwindcss/forms'),
+        require('@tailwindcss/typography'),
+    ],
 };

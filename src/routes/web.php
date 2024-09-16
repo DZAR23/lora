@@ -5,6 +5,7 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\SendMessageController;
 use App\Http\Controllers\MapaConductoresController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TarifarioController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -30,5 +31,9 @@ Route::middleware([
             
         Route::get('/send-message', [SendMessageController::class, 'create'])->name('messages.create');
         Route::post('/send-message', [SendMessageController::class, 'store'])->name('messages.store');
+
+        Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+            Route::resource('tarifario', TarifarioController::class);
+        });
     });
 });
